@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <div style="width: 100%">
-      <timeLine @click="clickItem" :timeLineList="timeLineList"></timeLine>
+      <CreateTimeLine @click="clickItem" :timeLineList="timeLineList"></CreateTimeLine>
     </div>
   </div>
 </template>
 
 <script>
-import timeLine from './components/timeLine.vue'
+import CreateTimeLine from './components/timeLine.vue'
 
 export default {
   name: 'app',
   components: {
-    timeLine
+    CreateTimeLine
   },
   data() {
     return {
@@ -24,7 +24,8 @@ export default {
                   id: 2,
                   timestamp: '2014-10-6',
                   info: '工作室更名为：西安拓美网络科技有限公司03'
-                },{
+                },
+                {
                   id: 3,
                   timestamp: '2015-10-6',
                   info: '工作室更名为：西安拓美网络科技有限公司02'

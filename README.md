@@ -1,5 +1,5 @@
 # create-time-line
-创建连线树
+时间轴
 
 
 ### 下载该组件 
@@ -22,7 +22,7 @@ Vue.use(CreateTimeLine);
 使用组件
 ```html
 <template>
-  <timeLine @click="clickItem"  :timeLineList = "timeLineList"></timeLine>
+  <CreateTimeLine @click="clickItem"  :timeLineList="timeLineList"></CreateTimeLine>
 </template>
 
 <!-- 数据格式 -->
@@ -95,6 +95,7 @@ data() {
 id | String | id | 数据唯一字段
 info | String | info | 需展示说明值字段
 timestamp| String | timestamp | 展示数据底部字段
+showNum | Number | 8 | 展示条数
 timeLineList| Array | [] | 数据
 click | function | | 点击回调函数
 

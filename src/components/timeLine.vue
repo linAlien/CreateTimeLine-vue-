@@ -1,47 +1,50 @@
 <template>
     <!--时间线-->
     <div class="time-line" style="display:flex;">
-        <div class="container">
-            <div style="display:flex;">
-                <div style="flex:1;display:flex;flex-direction:column">
-                    <div style="flex:1;display:flex;">
-                        <div style="flex:1;"></div>
-                        <div class="move-button"  :disabled="left_button_disabled" @click="moveLeft()">
-                            <div class="icon-button" v-bind:class="{'botton-active': left_button_active}" >
-                                <i class="iconfont icon-jiantou_zuo" style="transform: scale(0.4) !important;"></i>
-                            </div>
-                        </div>
-                        <div class="item"></div>
-                    </div>
-                    <div class="item_bottom">
-                        <span style="color:white;">左</span>
+        <div style="flex:1;display:flex;flex-direction:column">
+            <div style="flex:1;display:flex;">
+                <div style="flex:1;"></div>
+                <div class="move-button"  :disabled="left_button_disabled" @click="moveLeft()">
+                    <div class="icon-button" v-bind:class="{'botton-active': left_button_active}" >
+                        <i class="iconfont icon-jiantou_zuo" style="transform: scale(0.4) !important;"></i>
                     </div>
                 </div>
+            </div>
+            <div class="item_bottom">
+                <span style="color:white;">左</span>
+            </div>
+        </div>
 
-
+        <div class="container">
+            <div style="display:flex;">
                 <template v-for="(item, index) in timeLineList" >
-                    <div  :key="item[id]" v-if="timeLineList.length <= showNum" style="flex:1;display:flex;flex-direction:column;">
-                        <div style="flex:1;display:flex">
-                            <div class="item"></div>
-                            <el-tooltip effect="light" placement="top" :popper-class="'create-time-line-tooltip'">
-                                <div slot="content">{{item[info]}}</div>
-                                <div class="dot" @click="clickItem(item)" @mouseover="changeActive(item[id])" :class="{active: item[id] === timeIndex}"></div>
-                            </el-tooltip>
-                            <div class="item"></div>
+                    <!-- 数据不够长展示  -->
+                    <div  :key="item[id]" v-if="timeLineList.length <= showNum" style="flex:1;display:flex;flex-direction:column;position: relative;">
+                       <div class="hind-font" @click="clickItem(item)" :class="{active: item[id] === timeIndex}">
+                            {{item[info]}}
+                        </div>
+                        <div style="flex:1;display:flex;">
+                            <div class="item" :class="{'item-start': item.start}"></div>
+                            <div effect="light" placement="top" :popper-class="'create-time-line-tooltip'">
+                                <div class="dot" :class="{ 'dot-start': item.start, 'dot-end': item.end}"></div>
+                            </div>
+                            <div class="item" :class="{'item-end': item.end}"></div>
                         </div>
                         <div class="item_bottom">
                             <span>{{item[timestamp]}}</span>
                         </div>
                     </div>
-                    <div :key="item[id]" v-if="index > point && index <= point_end && timeLineList.length > showNum" style="flex:1;display:flex;flex-direction:column;">
-                        <div style="flex:1;display:flex">
-                            <div class="item"></div>
-                            <el-tooltip effect="light" placement="top" :popper-class="'create-time-line-tooltip'">
-                                <div slot="content">{{item[info]}}</div>
-                                <!-- <div class="dot" @click="clickItem(item)" @mouseover="changeActive(item[id])" :class="{active: item[id] === timeIndex}"></div> -->
-                                <div class="dot" @click="clickItem(item)" :class="{active: item[id] === timeIndex}"></div>
-                            </el-tooltip>
-                            <div class="item"></div>
+                    <!-- 数据超出宽展示 -->
+                    <div :key="item[id]" v-if="index > point && index <= point_end && timeLineList.length > showNum" style="flex:1;display:flex;flex-direction:column;position: relative;">
+                        <div class="hind-font" @click="clickItem(item)" :class="{active: item[id] === timeIndex}">
+                            {{item[info]}}
+                        </div>
+                        <div style="flex:1;display:flex;">
+                            <div class="item" :class="{'item-start': item.start}"></div>
+                            <div effect="light" placement="top" :popper-class="'create-time-line-tooltip'">
+                                <div class="dot" :class="{ 'dot-start': item.start, 'dot-end': item.end}"></div>
+                            </div>
+                            <div class="item" :class="{'item-end': item.end}"></div>
                         </div>
                         <div class="item_bottom">
                             <span>{{item[timestamp]}}</span>
@@ -49,9 +52,8 @@
                     </div>
                 </template>
 
-                <div style="flex:1;display:flex;flex-direction:column;">
+                <!-- <div style="flex:1;display:flex;flex-direction:column;">
                     <div style="flex:1;display:flex">
-                        <div class="item"></div>
                         <div class="move-button" :disabled="right_button_disabled" @click="moveRight()">
                              <div class="icon-button" v-bind:class="{'botton-active': right_button_active}" >
                                 <i class="iconfont icon-jiantou_you" style="transform: scale(0.4) !important;"></i>
@@ -62,8 +64,22 @@
                     <div class="item_bottom">
                         <span style="color:white;">右</span>
                     </div>
-                </div>
+                </div> -->
 
+            </div>
+        </div>
+
+        <div style="flex:1;display:flex;flex-direction:column;">
+            <div style="flex:1;display:flex">
+                <div class="move-button" :disabled="right_button_disabled" @click="moveRight()">
+                        <div class="icon-button" v-bind:class="{'botton-active': right_button_active}" >
+                        <i class="iconfont icon-jiantou_you" style="transform: scale(0.4) !important;"></i>
+                    </div>
+                </div>
+                <div style="flex:1;"></div>
+            </div>
+            <div class="item_bottom">
+                <span style="color:white;">右</span>
             </div>
         </div>
     </div>
@@ -93,12 +109,16 @@ export default {
         showNum: {
             type: Number,
             default: 8
+        },
+        selectIdValue: {
+            type: [String, Number],
+            default: -1,
         }
-
     },
     data() {
         return {
-            timeIndex: this.timeLineList[this.timeLineList.length-1][this.id], //默认当前选择的为最近的时间点
+            //默认当前选择的为最近的时间点
+            timeIndex: this.selectIdValue == -1 ? this.timeLineList[this.timeLineList.length-1][this.id] : this.selectIdValue,
             //时间轴只展示7个,初始为最后7个(不够只展示长度)
             point: this.timeLineList.length > this.showNum ? this.timeLineList.length-this.showNum : this.timeLineList.length,
             point_end: this.timeLineList.length-1,
@@ -153,6 +173,50 @@ export default {
 
 <style  scoped>
 @import "../assets/icon/iconfont.css";
+.hind-font{
+    font-family: Arial, sans-serif;
+    position: absolute;
+    top: -40px;
+    background: #ffffff;
+    box-shadow: 0 0  10px  #cccccc;
+    padding: 5px 5px 7px 5px;
+    left: 0;
+    right: 0;
+    width: 50px;
+    text-align: center;
+    margin: auto;
+    border-radius: 5px;
+    line-height: 1;
+}
+.hind-font:hover{
+    background: #376fff;
+    color: #fff;
+}
+.hind-font:hover::before{
+    border-top-color:  #376fff;
+}
+.active{
+    background: #376fff !important;
+    color: #fff !important;
+}
+.active::before{
+    border-top-color:  #376fff !important;
+}
+
+.hind-font::before{
+    content: '';
+    border: 5px solid #ffffff;
+    display: block;
+    width: 0;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+}
 .container{
     width: 100%;
     height: 30px;
@@ -161,7 +225,8 @@ export default {
     margin-bottom: 5px;
 }
 .dot{
-    border: 3px solid #d3d3d3;
+    /* border: 3px solid #d3d3d3; */
+    border: 3px solid #376FFF;
     width: 12px;
     height: 12px;
     border-radius: 15px;
@@ -169,16 +234,22 @@ export default {
     margin: 1px 0px;
     box-sizing: border-box;
 }
-.dot:hover{
-    border: 5px solid #376FFF;
+.dot-start,
+.dot-end{
+    border: 5px solid #376FFF !important;
 }
+
 .item{
     flex:1;
-    border-bottom:1px solid #d3d3d3;
-    margin-bottom: 9px;
+    border-bottom:1px solid #376FFF;
+    margin-bottom: 6px;
     box-sizing: border-box;
 }
 
+.item-start,
+.item-end{
+    border-bottom:1px solid  #d3d3d3 !important;
+}
 .item_bottom{
     flex:1;
     text-align:center;
@@ -193,21 +264,19 @@ export default {
     text-align: center;
     box-sizing: border-box;
 }
-.active{
-    background-color: #fff !important;
-    border: 5px solid #376FFF;
-}
+
 .icon-button{
-    height: 30px;
-    width: 10px;
-    line-height: 30px;
+    height: 36px;
+    width: 12px;
+    line-height: 36px;
     background: #376FFF;
     color: #fff;
     text-align: center;
     position: relative;
-    top: -7px;
-    font-size: 10px;
+    top: -10px;
+    font-size: 12px;
     cursor: pointer;
+    transform: scale(0.8);
 }
 .botton-active{
     background: #376FFF;
